@@ -61,6 +61,8 @@ src_steering_angles=np.array(src_steering_angles)
 print("data size:",src_img_names.shape[0])
 
 
+import scipy.ndimage
+import scipy.misc
 def get_img_and_angle(index):
 	img_path=src_img_names[index]
 	print(img_path)
