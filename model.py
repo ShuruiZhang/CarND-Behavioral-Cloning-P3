@@ -117,7 +117,7 @@ print("building network...")
 from keras.layers import Dense, Flatten, Activation
 model = Sequential()
 #5 conv layers
-model.add(Convolution2D(24,5,5,subsample=(2,2),input_shape=(80,160,3)))
+model.add(Convolution2D(24,5,5,subsample=(2,2),input_shape=(160,320,3)))
 model.add(Activation('relu'))
 
 model.add(Convolution2D(36,5,5,subsample=(2,2)))
