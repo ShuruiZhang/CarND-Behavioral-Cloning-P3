@@ -38,15 +38,16 @@ from numpy import genfromtxt
 def decode_filename(filename):
 	return os.getcwd()+'/data/'+filename.decode("utf-8").strip()
 files = genfromtxt(log_path,delimiter=',',dtype="|S50, |S50, |S50, float, float, float, float")
+files=[1:]
 files = np.array(files)
 src_img_names=[]
 src_steering_angles=[]
 for line in files:
 	steering_angle = line[3]
-	center= decode_filename(line[0])
+	center_name= decode_filename(line[0])
 	left= decode_filename(line[1])
 	right= decode_filename(line[2])
-	src_img_names.append(center)
+	src_img_names.append(center_name)
 	src_steering_angles.append(steering_angle)
 	src_img_names.append(left)
 	src_steering_angles.append(steering_angle+CAMERA_OFFSET)
