@@ -63,6 +63,7 @@ print("data size:",src_img_names.shape[0])
 
 def get_img_and_angle(index):
 	img_path=src_img_names[index]
+	print(img_path)
 	steering_angle=src_steering_angles[index]
 	img=scipy.ndimage.imread(img_path)
 	random_flip = random.randint(0,1)
@@ -76,6 +77,7 @@ def normalize_grayscale(image_data):
 	b=0.5
 	grayscale_min = 0
 	grayscale_max=255
+	print('normalized')
 	return a+(((image_data-grayscale_min)*(b-a)/(grayscale_max - grayscale_min)))
 
 def _generator(BATCH_SIZE):
