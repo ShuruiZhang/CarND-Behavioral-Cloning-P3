@@ -90,15 +90,15 @@ def _generator(BATCH_SIZE):
 			labels.append(steering_angle)
 			weights.append(abs(steering_angle+0.1))
 
-			if (len(features)>= BATCH_SIZE):
-				x = np.array(features)
-				y= np. array(labels)
-				w= np.array(weights)
+			#if (len(features)>= BATCH_SIZE):
+			x = np.array(features)
+			y= np. array(labels)
+			w= np.array(weights)
 
-				features= []
-				labels=[]
-				weights=[]
-				yield (x, y, w)
+			features= []
+			labels=[]
+			weights=[]
+		yield x, y, w
 
 
 
