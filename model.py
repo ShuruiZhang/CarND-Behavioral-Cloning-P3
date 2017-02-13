@@ -32,11 +32,16 @@ log_path=os.getcwd()+'/data/driving_log.csv'
 from numpy import genfromtxt
 def decode_filename(filename):
 	return os.getcwd()+'/data/'+filename.decode("utf-8").strip()
+
 files = genfromtxt(log_path,delimiter=',',dtype="|S50, |S50, |S50, float, float, float, float")
 files=files[1:]
 files = np.array(files)
 src_img_names=[]
 src_steering_angles=[]
+
+###  These encode data source code(the for loop and line 36) 
+#were learned from https://github.com/orenmeiri/carnd-p3-behavior-cloning/blob/master/model.py, line 40 to 50
+###
 for line in files:
 	steering_angle = line[3]
 	center_name= decode_filename(line[0])
