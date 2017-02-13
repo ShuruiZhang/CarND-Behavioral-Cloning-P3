@@ -13,6 +13,7 @@ from keras.models import Sequential
 # from keras.optimizers import Adam
 import tensorflow as tf
 import time
+import random
 
 
 
