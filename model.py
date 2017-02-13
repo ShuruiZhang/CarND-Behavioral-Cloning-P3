@@ -72,7 +72,7 @@ def get_img_and_angle(index):
 	img=scipy.ndimage.imread(img_path)
 	random_flip = random.randint(0,1)
 	if (random_flip==1):
-		img = scipy.flipr(img)
+		img = scipy.fliplr(img)
 		steering_angle= -steering_angle
 	return img, steering_angle*100 
 
@@ -84,11 +84,12 @@ def normalize_grayscale(image_data):
 	print('normalized')
 	return a+(((image_data-grayscale_min)*(b-a)/(grayscale_max - grayscale_min)))
 
-def _generator(BATCH_SIZE):
-	features=[]
-	labels=[]
-	weights=[]
-	while True:
+def _generator(batch_sz):
+
+	while 1:
+		features=[]
+		labels=[]
+		weights=[]
 		for index in range(len(src_img_names)):
 			image, steering_angle = get_img_and_angle(index)
 			image = normalize_grayscale(image)
@@ -96,15 +97,15 @@ def _generator(BATCH_SIZE):
 			labels.append(steering_angle)
 			weights.append(abs(steering_angle+0.1))
 
-			#if (len(features)>= BATCH_SIZE):
-			x = np.array(features)
-			y= np. array(labels)
-			w= np.array(weights)
+			if (len(features)>= BATCH_SIZE):
+				x = np.array(features)
+				y= np. array(labels)
+				w= np.array(weights)
 
-			features= []
-			labels=[]
-			weights=[]
-		yield x, y, w
+				features= []
+				labels=[]
+				weights=[]
+				yield x, y, w
 
 
 
