@@ -38,7 +38,7 @@ from numpy import genfromtxt
 def decode_filename(filename):
 	return os.getcwd()+'/data/'+filename.decode("utf-8").strip()
 files = genfromtxt(log_path,delimiter=',',dtype="|S50, |S50, |S50, float, float, float, float")
-files=[1:]
+files=files[1:]
 files = np.array(files)
 src_img_names=[]
 src_steering_angles=[]
