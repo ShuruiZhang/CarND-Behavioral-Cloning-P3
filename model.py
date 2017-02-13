@@ -87,7 +87,7 @@ def _generator(batch_sz):
 		features=[]#store imgs
 		labels=[]#store steering angles
 		weights=[]#store weights
-		for index in range(int(len(src_img_names)*0.8):
+		for index in range(int(len(src_img_names)*0.8)):
 			image, steering_angle = get_img_and_angle(index)
 			#before feeding to the training data, normalize operation should be applied.
 			image = normalize_grayscale(image)
