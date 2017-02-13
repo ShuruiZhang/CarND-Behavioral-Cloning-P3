@@ -61,12 +61,10 @@ print("data size:",src_img_names.shape[0])
 
 import scipy.ndimage
 import scipy.misc
-img_num= 0
 def get_img_and_angle(index):
 	img_path=src_img_names[index]
 	#print(img_path)
-	img_num=img_num+1
-	print(img_num, "image")
+	print('image',index)
 	steering_angle=src_steering_angles[index]
 	img=scipy.ndimage.imread(img_path)
 	random_flip = random.randint(0,1)
