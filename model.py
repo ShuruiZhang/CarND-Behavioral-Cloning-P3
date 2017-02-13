@@ -97,8 +97,8 @@ def _generator(batch_sz):
 			labels.append(steering_angle)
 			weights.append(abs(steering_angle+0.1))
 
-			if (len(features)>= BATCH_SIZE):
-				x = np.array(features)
+			if (len(features)>= batch_sz):
+				x = np.array(features) 
 				y= np. array(labels)
 				w= np.array(weights)
 
