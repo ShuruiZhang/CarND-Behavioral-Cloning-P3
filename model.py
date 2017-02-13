@@ -5,19 +5,13 @@ import os
 import numpy as np
 #import matplotlib.pyplot as plt
 import csv
-import random
-#use train_test_split to divide data
-from sklearn.model_selection import train_test_split
-
 #import keras
 from keras.layers import Input,Convolution2D, MaxPooling2D, Dropout
 # from keras.layers import Dropout, Flatten, Lambda, AveragePooling2D
 from keras.models import Sequential
 # from keras.layers import *
 # from keras.optimizers import Adam
-
 import tensorflow as tf
-
 import time
 
 
@@ -54,7 +48,7 @@ for line in files:
 	src_img_names.append(right)
 	src_steering_angles.append(steering_angle-CAMERA_OFFSET)
 
-#shuffle data
+#shuffle data to avoid overfitting
 from sklearn.utils import shuffle
 src_img_names,src_steering_angles= shuffle(src_img_names,src_steering_angles)
 #reformat list as np array
@@ -77,25 +71,29 @@ def get_img_and_angle(index):
 		steering_angle= -steering_angle
 	return img, steering_angle*100 
 
+#normalize operation on grayscale
 def normalize_grayscale(image_data):
 	a = -0.5
 	b=0.5
 	grayscale_min = 0
 	grayscale_max=255
 	print('normalized')
+	#normalize operation below
 	return a+(((image_data-grayscale_min)*(b-a)/(grayscale_max - grayscale_min)))
 
 def _generator(batch_sz):
 
 	while 1:
-		features=[]
-		labels=[]
-		weights=[]
-		for index in range(len(src_img_names)):
+		features=[]#store imgs
+		labels=[]#store steering angles
+		weights=[]#store weights
+		for index in range(int(len(src_img_names)*0.8):
 			image, steering_angle = get_img_and_angle(index)
+			#before feeding to the training data, normalize operation should be applied.
 			image = normalize_grayscale(image)
 			features.append(image)
 			labels.append(steering_angle)
+
 			weights.append(abs(steering_angle+0.1))
 
 			if (len(features)>= batch_sz):
@@ -169,10 +167,8 @@ for i in range(EPOCHS):
 	##build validation pipline
 	validation_features = []
 	validation_labels = []
-	for j in range(int(len(src_img_names)/100)):
-		#get a random image in the image data source
-		index = random.randint(0,len(src_img_names)-1)
-		validation_image, validation_angle = get_img_and_angle(index)
+	for j in range(int(len(src_img_names)*0.8),len(src_img_names)-1):
+		validation_image, validation_angle = get_img_and_angle(j)
 		validation_image= normalize_grayscale(validation_image)
 		validation_features.append(validation_image)
 		validation_labels.append(validation_angle)
