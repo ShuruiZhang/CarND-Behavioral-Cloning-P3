@@ -10,7 +10,7 @@ from random import randint
 from sklearn.model_selection import train_test_split
 
 #import keras
-from keras.layers import Input,Convolution2D, Maxpooling2D, Dropout
+from keras.layers import Input,Convolution2D, MaxPooling2D, Dropout
 # from keras.layers import Dropout, Flatten, Lambda, AveragePooling2D
 from keras.models import Sequential
 # from keras.layers import *
@@ -36,7 +36,7 @@ from numpy import genfromtxt
 def decode_filename(filename):
 	return os.getcwd()+'/data/'+filename.decode("utf-8").strip()
 files = genfromtxt(log_path,delimiter=',',dtype="|S50, |S50, |S50, float, float, float, float")
-files = np.array(file)
+files = np.array(files)
 src_img_names=[]
 src_steering_angles=[]
 for line in files:
@@ -78,11 +78,11 @@ def normalize_grayscale(image_data):
 	grayscale_max=255
 	return a+(((image_data-grayscale_min)*(b-a)/(grayscale_max - grayscale_min)))
 
-def generator():
+def _generator(BATCH_SIZE):
+	features=[]
+	labels=[]
+	weights=[]
 	while True:
-		features= []
-		labels=[]
-		weights=[]
 		for index in range(len(src_img_names)):
 			image, steering_angle = get_img_and_angle(index)
 			image = normalize_grayscale(image)
@@ -98,7 +98,7 @@ def generator():
 				features= []
 				labels=[]
 				weights=[]
-				yield x, y, w
+				yield (x, y, w)
 
 
 
@@ -110,21 +110,21 @@ print("building network...")
 from keras.layers import Dense, Flatten, Activation
 model = Sequential()
 #5 conv layers
-model.add(Convolution2D(24,5,5),subsample=(2,2),input_shape=(80,160,3))
+model.add(Convolution2D(24,5,5,subsample=(2,2),input_shape=(80,160,3)))
 model.add(Activation('relu'))
 
-model.add(Convolution2D(36,5,5),subsample=(2,2))
+model.add(Convolution2D(36,5,5,subsample=(2,2)))
 model.add(Activation('relu'))
 
-model.add(Convolution2D(48,5,5),subsample=(2,2))
+model.add(Convolution2D(48,5,5,subsample=(2,2)))
 model.add(Activation('relu'))
 
-model.add(Convolution2D(64,3,3),subsample=(2,2))
-model.add(Activation('softmax'))
+model.add(Convolution2D(64,3,3,subsample=(2,2)))
+model.add(Activation('relu'))
 
 
-model.add(Convolution2D(64,3,3),subsample=(2,2))
-model.add(Activation('softmax'))
+#model.add(Convolution2D(64,3,3),subsample=(2,2))
+#model.add(Activation('softmax'))
 
 #4 fully connected layers
 #add  dropout to avoid overfitting
@@ -138,7 +138,7 @@ model.add(Dropout(0.5))
 model.add(Dense(50))
 model.add(Activation('relu'))
 model.add(Dense(10))
-model.add(Activation('softmax'))
+model.add(Activation('relu'))
 print('network was built.')
 
 
@@ -153,10 +153,10 @@ def save_model():
 	model.save('model.h5')
 	print('model saved.')
 
-generator= generator(BATCH_SIZE)
+generator= _generator(BATCH_SIZE)
 
 for i in range(EPOCHS):
-	model.fit(generator,len(src_img_names), 1, verbose=0.2)
+	model.fit_generator(generator,len(src_img_names), 1, verbose=0.2)
 	##build validation pipline
 	validation_features = []
 	validation_labels = []
