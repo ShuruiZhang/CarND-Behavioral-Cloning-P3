@@ -61,9 +61,12 @@ print("data size:",src_img_names.shape[0])
 
 import scipy.ndimage
 import scipy.misc
+img_num= 0
 def get_img_and_angle(index):
 	img_path=src_img_names[index]
-	print(img_path)
+	#print(img_path)
+	img_num=img_num+1
+	print(img_num, "image")
 	steering_angle=src_steering_angles[index]
 	img=scipy.ndimage.imread(img_path)
 	random_flip = random.randint(0,1)
@@ -88,7 +91,7 @@ def _generator(batch_sz):
 		features=[]#store imgs
 		labels=[]#store steering angles
 		weights=[]#store weights
-		for index in range(int(len(src_img_names)*0.8)):
+		for index in range(int(len(src_img_names)*0.9)):
 			image, steering_angle = get_img_and_angle(index)
 			#before feeding to the training data, normalize operation should be applied.
 			image = normalize_grayscale(image)
@@ -168,7 +171,7 @@ for i in range(EPOCHS):
 	##build validation pipline
 	validation_features = []
 	validation_labels = []
-	for j in range(int(len(src_img_names)*0.8),len(src_img_names)-1):
+	for j in range(int(len(src_img_names)*0.9),len(src_img_names)-1):
 		validation_image, validation_angle = get_img_and_angle(j)
 		validation_image= normalize_grayscale(validation_image)
 		validation_features.append(validation_image)
