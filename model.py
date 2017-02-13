@@ -5,7 +5,7 @@ import os
 import numpy as np
 #import matplotlib.pyplot as plt
 import csv
-from random import randint
+import random
 #use train_test_split to divide data
 from sklearn.model_selection import train_test_split
 
@@ -19,6 +19,8 @@ from keras.models import Sequential
 import tensorflow as tf
 
 import time
+
+
 
 
 CAMERA_OFFSET=0.2
