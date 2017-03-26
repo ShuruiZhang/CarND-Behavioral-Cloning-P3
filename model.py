@@ -39,9 +39,7 @@ files = np.array(files)
 src_img_names=[]
 src_steering_angles=[]
 
-###  These encode data source code(the for loop and line 36) 
-#were learned from https://github.com/orenmeiri/carnd-p3-behavior-cloning/blob/master/model.py, line 40 to 50
-###
+
 for line in files:
 	steering_angle = line[3]
 	center_name= decode_filename(line[0])
@@ -87,6 +85,11 @@ def normalize_grayscale(image_data):
 	print('normalized')
 	#normalize operation below
 	return a+(((image_data-grayscale_min)*(b-a)/(grayscale_max - grayscale_min)))
+
+def augment_image(image, steering_angle):
+    image = augment_brightness_camera_images(image)
+    image, steering_angle = random_shear(image, steering_angle, 100)
+    return image, steering_angle
 
 def _generator(batch_sz):
 
@@ -176,6 +179,8 @@ for i in range(EPOCHS):
 	validation_labels = []
 	for j in range(int(len(src_img_names)*0.9),len(src_img_names)-1):
 		validation_image, validation_angle = get_img_and_angle(j)
+		##add augment function
+		validation_image, validation_angle = augment_image(validation_image, validation_angle)
 		validation_image= normalize_grayscale(validation_image)
 		validation_features.append(validation_image)
 		validation_labels.append(validation_angle)
