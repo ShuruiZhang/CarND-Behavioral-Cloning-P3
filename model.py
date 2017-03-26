@@ -124,16 +124,16 @@ from keras.layers import Dense, Flatten, Activation
 model = Sequential()
 #5 conv layers
 model.add(Convolution2D(24,5,5,subsample=(2,2),input_shape=(160,320,3)))
-model.add(Activation('relu'))
+model.add(Activation('elu'))
 
 model.add(Convolution2D(36,5,5,subsample=(2,2)))
-model.add(Activation('relu'))
+model.add(Activation('elu'))
 
 model.add(Convolution2D(48,5,5,subsample=(2,2)))
-model.add(Activation('relu'))
+model.add(Activation('elu'))
 
 model.add(Convolution2D(64,3,3,subsample=(2,2)))
-model.add(Activation('relu'))
+model.add(Activation('elu'))
 
 
 #model.add(Convolution2D(64,3,3),subsample=(2,2))
@@ -145,11 +145,11 @@ model.add(Flatten())
 model.add(Dropout(0.5))
 
 model.add(Dense(100))
-model.add(Activation('relu'))
+model.add(Activation('elu'))
 model.add(Dropout(0.5))
 
 model.add(Dense(50))
-model.add(Activation('relu'))
+model.add(Activation('elu'))
 model.add(Dense(10))
 model.add(Activation('relu'))
 model.add(Dense(1))
