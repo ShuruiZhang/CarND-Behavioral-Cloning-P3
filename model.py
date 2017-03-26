@@ -86,6 +86,26 @@ def normalize_grayscale(image_data):
 	#normalize operation below
 	return a+(((image_data-grayscale_min)*(b-a)/(grayscale_max - grayscale_min)))
 
+from PIL import Image
+from PIL import ImageEnhance
+def random_shear(image, steering, shear_range):
+    rows, cols, ch = image.shape
+    dx = np.random.randint(-shear_range, shear_range + 1)
+    #    print('dx',dx)
+    random_point = [cols / 2 + dx, rows / 2]
+    pts1 = np.float32([[0, rows], [cols, rows], [cols / 2, rows / 2]])
+    pts2 = np.float32([[0, rows], [cols, rows], random_point])
+    dsteering = dx / (rows / 2) * 360 / (2 * np.pi * 25.0) / 6.0
+    M = cv2.getAffineTransform(pts1, pts2)
+    image = cv2.warpAffine(image, M, (cols, rows), borderMode=1)
+    steering += dsteering
+    return image, steering
+
+def augment_brightness_camera_images(image):
+    enhancer = ImageEnhance.Brightness(Image.fromarray(image))
+    img_enhanced = enhancer.enhance(0.5)
+    return np.array(img_enhanced)
+
 def augment_image(image, steering_angle):
     image = augment_brightness_camera_images(image)
     image, steering_angle = random_shear(image, steering_angle, 100)
